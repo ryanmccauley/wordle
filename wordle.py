@@ -1,6 +1,7 @@
 import random
 import datetime
 
+# Constants for emojis representing correct or wrong letters in guesses
 LETTER_NOT_IN = '⬛'
 LETTER_IN_WRONG_PLACE = '🟨'
 LETTER_IN_RIGHT_PLACE = '🟩'
@@ -11,18 +12,22 @@ game_history = []
 # Word list from https://github.com/tabatkins/wordle-list
 words = []
 
+# Load the words from the words.txt file and add them to the word list
 def load_words():
     with open('words.txt', 'r') as f:
         lines = f.readlines()
         for line in lines:
             words.append(line)
 
+# Returns a word based on today's day
 def get_todays_word():
     return words[((datetime.datetime.utcnow() - datetime.datetime(1970,1,1)).days) % len(words)]
 
+# Returns a random word from the word list
 def get_random_word():
     return words[random.randint(0, len(words))]
 
+# Main loop that runs the game
 def main():
     load_words()
     print(f'{len(words)} total words loaded...')
@@ -37,7 +42,6 @@ def main():
     while isPlaying:
         print('Would you like to play today\'s word instead of a random word (y = yes, n = no)')
         choice = input()
-        word_index = -1
         if choice.lower() == 'y':
             play(get_todays_word())
         elif choice.lower() == 'n':
@@ -45,7 +49,20 @@ def main():
         else:
             print('Invalid choice! Please enter \'y\' or \'n\'')
             continue
+        display_stats()
 
+# Display the stats to the user such as the total games played, won, lost, and the streaks
+def display_stats():
+    print('Your stats:')
+    print(f' - Total games played: {len(game_history)}')
+    print(f' - Total games won: {determine_wins()}')
+    print(f' - Total games lost: {len(game_history) - determine_wins()}')
+    print()
+    print(f' - Current win streak: {determine_current_streak()}')
+    print(f' - Longest win streak: {determine_longest_streak()}')
+    print()
+
+# Display the instructions of how to play the game to the user
 def display_instructions():
     print('You have 5 tries to guess the wordle. After each guess, you will get receive 5 emojis for each letter of the guessed word.')
     print()
@@ -57,8 +74,8 @@ def display_instructions():
     print('Good luck!')
     print()
 
+# Invokes a game with the user
 def play(word):
-    #print('The word is: ' + word)
     tries = 5
     won = False
 
@@ -83,10 +100,11 @@ def play(word):
     if won:
         print(f'🎉 Congrats you got the wordle in {5 - tries + 1} tries.')
     else:
-        print(f'You lost! Better luck next time. The wordle was {word}')
+        print(f'❌ You lost! Better luck next time. The wordle was {word}')
 
     game_history.append(1 if won else 0)
 
+# Prints the correct number of emojis based on the guess and the actual word
 def print_emojis(guess, actual):
     freq = {}
 
@@ -115,32 +133,47 @@ def print_emojis(guess, actual):
 
     print()
         
-def determine_wins(games):
+# Determines the number of wins from the game_history array
+def determine_wins():
     wins = 0
-    for i in range(0, len(games)):
-        if games[i] == 1:
+    for i in range(0, len(game_history)):
+        if game_history[i] == 1:
             wins += 1
     return wins
 
-def determine_current_streak(games):
-    if len(games) == 0:
+# Determines the current streak of the user based on the game_history array
+def determine_current_streak():
+    if len(game_history) == 0:
         return 0
     
-    game_index = len(games) - 1
+    game_index = len(game_history) - 1
     current_streak = 0
 
     while game_index >= 0:
-        if games[game_index] != 1:
+        if game_history[game_index] != 1:
             break
         current_streak += 1
         game_index -= 1
 
     return current_streak
     
+# Determines the longest streak of the user based on the game_history array
+def determine_longest_streak():
+    longest = 0
+    for i in range(0, len(game_history)):
+        if game_history[i] != 1:
+            continue
+        j = i + 1
+        curr = 1
+        while j < len(game_history):
+            if game_history[j] == 1:
+                curr += 1
+            else:
+                break
+            j += 1
+        longest = max(curr, longest)
+    return longest
 
-# TODO - implement
-def determine_largest_streak(games):
-    pass 
 
 if __name__ == '__main__':
     main()
