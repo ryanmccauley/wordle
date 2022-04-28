@@ -6,6 +6,8 @@ LETTER_NOT_IN = '⬛'
 LETTER_IN_WRONG_PLACE = '🟨'
 LETTER_IN_RIGHT_PLACE = '🟩'
 
+NUM_GUESSES = 6
+
 # Array of 0s and 1s, 0 for lose (never got the word) 1 for win (got the word)
 game_history = []
 
@@ -67,7 +69,7 @@ def display_stats():
 
 # Display the instructions of how to play the game to the user
 def display_instructions():
-    print('You have 5 tries to guess the wordle. After each guess, you will get receive 5 emojis for each letter of the guessed word.')
+    print(f'You have {NUM_GUESSES} tries to guess the wordle. After each guess, you will get receive 5 emojis for each letter of the guessed word.')
     print()
     print(f'If the letter is {LETTER_NOT_IN}, it means that this letter is not in the word.')
     print(f'If the letter is {LETTER_IN_WRONG_PLACE}, it means that this letter is in the word, but not in the right place.')
@@ -79,11 +81,11 @@ def display_instructions():
 
 # Invokes a game with the user
 def play(word):
-    tries = 5
+    tries = NUM_GUESSES
     won = False
 
     while tries > 0:
-        print(f'Guess #{5 - tries + 1}: ', end='')
+        print(f'Guess #{NUM_GUESSES - tries + 1}: ', end='')
         guess = input().lower()
 
         if len(guess) != 5:
@@ -101,7 +103,7 @@ def play(word):
         tries -= 1
 
     if won:
-        print(f'🎉 Congrats you got the wordle in {5 - tries + 1} tries.')
+        print(f'🎉 Congrats you got the wordle in {NUM_GUESSES - tries + 1} tries.')
     else:
         print(f'❌ You lost! Better luck next time. The wordle was {word}')
 
