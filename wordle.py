@@ -40,9 +40,12 @@ def main():
 
     isPlaying = True
     while isPlaying:
-        print('Would you like to play today\'s word instead of a random word (y = yes, n = no)')
+        print('Would you like to play today\'s word instead of a random word (y = yes, n = no, q = quit)')
         choice = input()
-        if choice.lower() == 'y':
+        if choice.lower() == 'q':
+            isPlaying = False
+            print('Thanks for playing!')
+        elif choice.lower() == 'y':
             play(get_todays_word())
         elif choice.lower() == 'n':
             play(get_random_word())
