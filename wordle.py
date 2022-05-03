@@ -11,15 +11,22 @@ NUM_GUESSES = 6
 # Array of 0s and 1s, 0 for lose (never got the word) 1 for win (got the word)
 game_history = []
 
-# Word list from https://github.com/tabatkins/wordle-list
-words = []
-
-# Load the words from the words.txt file and add them to the word list
-def load_words():
-    with open('words.txt', 'r') as f:
-        lines = f.readlines()
-        for line in lines:
-            words.append(line)
+"""
+NOTE: Can be more words than in the list, just using 10 for simplicity
+Credit: https://github.com/tabatkins/wordle-list
+"""
+words = [
+    'inner',
+    'sinks',
+    'fried',
+    'chevy',
+    'games',
+    'pivot',
+    'knife',
+    'blaze',
+    'beast',
+    'logos',
+]
 
 # Returns a word based on today's day
 def get_todays_word():
@@ -31,7 +38,6 @@ def get_random_word():
 
 # Main loop that runs the game
 def main():
-    load_words()
     print(f'{len(words)} total words loaded...')
 
     print()    
